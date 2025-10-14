@@ -1,62 +1,230 @@
-# Express.js RESTful API Assignment
+# 🧸 Plushies API
 
-This assignment focuses on building a RESTful API using Express.js, implementing proper routing, middleware, and error handling.
+A RESTful API for managing plushies/stuffies inventory built with Express.js and MongoDB.
 
-## Assignment Overview
+## 🚀 Quick Start
 
-You will:
-1. Set up an Express.js server
-2. Create RESTful API routes for a product resource
-3. Implement custom middleware for logging, authentication, and validation
-4. Add comprehensive error handling
-5. Develop advanced features like filtering, pagination, and search
-
-## Getting Started
-
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Run the server:
-   ```
-   npm start
-   ```
-
-## Files Included
-
-- `Week2-Assignment.md`: Detailed assignment instructions
-- `server.js`: Starter Express.js server file
-- `.env.example`: Example environment variables file
-
-## Requirements
-
+### Prerequisites
 - Node.js (v18 or higher)
+- MongoDB (local or Atlas)
 - npm or yarn
-- Postman, Insomnia, or curl for API testing
 
-## API Endpoints
+### Installation
 
-The API will have the following endpoints:
+1. **Clone the repository**
+   ```bash
+   git clone <your-repository-url>
+   cd express-plushies-api
 
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get a specific product
-- `POST /api/products`: Create a new product
-- `PUT /api/products/:id`: Update a product
-- `DELETE /api/products/:id`: Delete a product
+## API Documentation
+1.Authentication
+2.Include an API key in the request header:
 
-## Submission
+- http
+x-api-key: plushies-123
+Valid API keys: plushies-123, stuffies-456, admin-789
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+3.Endpoints
+- Root
+GET / - API information
 
-1. Complete all the required API endpoints
-2. Implement the middleware and error handling
-3. Document your API in the README.md
-4. Include examples of requests and responses
+- Products
+Get All Products
 
-## Resources
+http
+GET /api/products
+Query Parameters:
 
-- [Express.js Documentation](https://expressjs.com/)
-- [RESTful API Design Best Practices](https://restfulapi.net/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 
+page - Page number (default: 1)
+
+limit - Items per page (default: 10)
+
+category - Filter by category
+
+inStock - Filter by stock status
+
+minPrice, maxPrice - Price range filter
+
+Response:
+
+json
+{
+  "success": true,
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 20,
+    "pages": 2
+  }
+}
+Get Single Product
+
+http
+GET /api/products/:id
+Create Product (Protected)
+
+http
+POST /api/products
+Headers: 
+  x-api-key: your-api-key
+  Content-Type: application/json
+
+Body:
+{
+  "name": "Product Name",
+  "description": "Product description",
+  "price": 100,
+  "category": "animal",
+  "inStock": true
+}
+Update Product (Protected)
+
+http
+PUT /api/products/:id
+Headers: 
+  x-api-key: your-api-key
+  Content-Type: application/json
+Delete Product (Protected)
+
+http
+DELETE /api/products/:id
+Headers: x-api-key: your-api-key
+Search Products
+
+http
+GET /api/products/search?q=search+term
+Get Statistics
+
+http
+GET /api/products/stats
+Product Categories
+animal - Animal plushies
+
+food - Food-themed plushies
+
+item - Object plushies
+
+fantasy - Fantasy creatures
+
+cartoon - Cartoon characters
+
+🗄️ Data Model
+javascript
+{
+  "name": "String (required)",
+  "description": "String (required)",
+  "price": "Number (required, min: 0)",
+  "category": "String (enum: animal,food,item,fantasy,cartoon)",
+  "inStock": "Boolean (default: true)",
+  "createdAt": "Date",
+  "updatedAt": "Date"
+}
+🛠️ Development
+Scripts
+npm start - Start production server
+
+npm run dev - Start development server with nodemon
+
+npm run seed - Populate database with sample data
+
+Sample Data
+The seed script creates 20 sample plushies including:
+
+Tobby (brown monkey)
+
+Fifi (pink flower vase)
+
+BunBun (hamburger bun)
+
+And many more!
+
+🧪 Testing
+Use tools like:
+
+Postman
+
+Insomnia
+
+curl
+
+Example curl commands:
+Get all products:
+
+bash
+curl http://localhost:3000/api/products
+Create a product:
+
+bash
+curl -X POST http://localhost:3000/api/products \
+  -H "x-api-key: plushies-123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Test Plush",
+    "description": "A test plushie",
+    "price": 299,
+    "category": "animal",
+    "inStock": true
+  }'
+🤝 Error Handling
+The API returns standardized error responses:
+
+json
+{
+  "success": false,
+  "message": "Error description",
+  "details": ["Additional error details"] // Optional
+}
+Common HTTP Status Codes
+200 - Success
+
+201 - Created
+
+400 - Validation error
+
+401 - Unauthorized (invalid API key)
+
+404 - Resource not found
+
+500 - Internal server error
+
+📦 Dependencies
+Production
+express - Web framework
+
+mongoose - MongoDB ODM
+
+body-parser - Request parsing
+
+dotenv - Environment variables
+
+uuid - ID generation
+
+Development
+nodemon - Development server
+
+🐛 Troubleshooting
+MongoDB Connection Issues:
+
+Ensure MongoDB is running
+
+Check connection string in .env
+
+Verify database permissions
+
+API Key Errors:
+
+Include x-api-key header for protected routes
+
+Use valid API keys from .env
+
+Validation Errors:
+
+Check required fields
+
+Ensure price is a positive number
+
+Use valid categories
+
+📄 License
+MIT License - feel free to use this project for learning purposes!
